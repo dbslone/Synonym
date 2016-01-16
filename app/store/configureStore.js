@@ -5,7 +5,6 @@ import logger from 'redux-logger'
 import {compact} from 'lodash'
 
 import rootReducer from '../reducers'
-import postgres from '../middleware/postgres'
 import DevTools from '../containers/DevTools'
 
 const __DEV__ = process.env.NODE_ENV !== 'production'
