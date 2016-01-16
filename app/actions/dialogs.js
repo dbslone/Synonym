@@ -5,6 +5,8 @@ import {
   UPDATE_ADD_CONNECTION_FIELD
 } from './action_types'
 
+import * as synonymConnections from './connections'
+
 import {
   isEmpty,
   isNull,
@@ -70,18 +72,16 @@ export function createNewConnection (payload) {
       (err) => {
         if (!isNull(err)) {
           alert('Unable to add the connection please try again.')
+          console.error('Error: Unable to add the connection. Please check your settings and try again.', err)
         }
         else {
           connections.push(obj)
 
-          fs.writeFile('databases.json', JSON.stringify(connections), fsError => {
-            if (fsError) {
-              throw fsError
-            }
-          })
+          fs.writeFileSync('databases.json', JSON.stringify(connections))
 
           dispatch(resetAddConnectionDialog())
           dispatch(toggleAddConnectionDialog())
+          dispatch(synonymConnections.initializeConnections())
         }
       }
     )

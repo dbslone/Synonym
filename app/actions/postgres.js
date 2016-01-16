@@ -21,7 +21,7 @@ export function updatePostgresQueryData (payload) {
 
 export function postgresExecuteQuery (payload) {
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
 
     let connectionString = 'postgres://dbslone@localhost:15432/decoraid_development'
     let connection = massive.connectSync({connectionString})

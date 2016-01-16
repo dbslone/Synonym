@@ -1,20 +1,36 @@
 import {
-  DELETE_CONNECTION,
   INITIALIZE_CONNECTIONS
 } from './action_types'
 
-export function initializeConnections (payload) {
+import {reject} from 'lodash'
 
+let fs = require('fs')
+
+export function initializeConnections () {
+
+  let connections
+  try {
+    connections = JSON.parse(fs.readFileSync('databases.json', {encoding: 'utf8'}))
+  }
+  catch (err) {
+    connections = []
+  }
+console.log('initialize connections: ', connections)
   return {
     type: INITIALIZE_CONNECTIONS,
-    payload
+    payload: connections
   }
 }
 
-export function deleteConnection (payload) {
+export function deleteConnection (nickname) {
 
-  return {
-    type: DELETE_CONNECTION,
-    payload
+  return (dispatch, getState) => {
+
+    let state = getState()
+
+    let connections = reject(state.connections, {nickname})
+console.log('left after delete: ', connections)
+    fs.writeFileSync('databases.json', JSON.stringify(connections), 'utf8')
+    dispatch(initializeConnections())
   }
 }

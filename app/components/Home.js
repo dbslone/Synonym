@@ -10,8 +10,6 @@ import {
   PostgresView
 } from '../packages'
 
-let fs = require('fs')
-
 let injectTapEventPlugin = require('react-tap-event-plugin')
 injectTapEventPlugin()
 
@@ -57,10 +55,10 @@ export default class Home extends Component {
   componentDidMount () {
 
     try {
-      this.props.initializeConnections(JSON.parse(fs.readFileSync('databases.json', {encoding: 'utf8'})))
+      this.props.initializeConnections()
     }
     catch (err) {
-      this.props.initializeConnections([])
+      this.props.initializeConnections()
     }
   }
 

@@ -1,5 +1,4 @@
 import {
-  DELETE_CONNECTION,
   INITIALIZE_CONNECTIONS
 } from '../actions/action_types'
 
@@ -11,11 +10,6 @@ export default function connections (state = initialState, action) {
 
     case INITIALIZE_CONNECTIONS: {
       return action.payload
-    }
-
-    case DELETE_CONNECTION: {
-
-      return state
     }
 
     default: {
