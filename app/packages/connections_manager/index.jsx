@@ -38,6 +38,7 @@ class ConnectionsManager extends Component {
 
   connect (connectionDetails) {
 
+    this.props.postgresAddConnection(connectionDetails)
     this.props.updateHomepageView({view: 'postgres', connection: connectionDetails})
   }
 
