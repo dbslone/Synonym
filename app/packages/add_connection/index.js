@@ -1,5 +1,11 @@
 import React, {Component, PropTypes} from 'react'
-import {Dialog, TextField, DropDownMenu} from 'material-ui'
+import {
+  Dialog,
+  DropDownMenu,
+  FlatButton,
+  MenuItem,
+  TextField
+} from 'material-ui'
 import {map} from 'lodash'
 
 class AddConnectionDialog extends Component {
@@ -7,7 +13,8 @@ class AddConnectionDialog extends Component {
   static propTypes = {
     create: PropTypes.func,
     form: PropTypes.shape({
-      address: PropTypes.string
+      address: PropTypes.string,
+      protocol: PropTypes.string
     }),
     onRequestClose: PropTypes.func,
     open: PropTypes.bool,
@@ -33,17 +40,19 @@ class AddConnectionDialog extends Component {
     this.props.updateAddConnectionField({field: 'protocol', value: menuItem})
   }
 
-  renderFormFields () {
+  renderDatabaseConnectionTypes () {
 
-    let styles = {
-      container: {
-        width: '90%',
-        margin: '0 auto'
-      },
-      textField: {
-        width: '100%'
-      }
-    }
+    let menuItems = [
+      {payload: 'mysql', text: 'MySQL'},
+      {payload: 'postgres', text: 'PostgreSQL'},
+      {payload: 'redis', text: 'Redis'},
+      {payload: 'sqlite', text: 'SQLite'}
+    ]
+
+    return map(menuItems, obj => <MenuItem value={obj.payload} primaryText={obj.text} />)
+  }
+
+  renderTextFields () {
 
     let fields = [
       {label: 'Nickname', id: 'nickname'},
@@ -54,14 +63,13 @@ class AddConnectionDialog extends Component {
       {label: 'Port', id: 'port'}
     ]
 
-    let menuItems = [
-      {payload: 'mysql', text: 'MySQL'},
-      {payload: 'postgres', text: 'PostgreSQL'},
-      {payload: 'redis', text: 'Redis'},
-      {payload: 'sqlite', text: 'SQLite'}
-    ]
+    let styles = {
+      textField: {
+        width: '100%'
+      }
+    }
 
-    let textFields = map(fields, (field) =>
+    return map(fields, (field) =>
       <TextField
         key={field.label}
         floatingLabelText={field.label}
@@ -69,23 +77,40 @@ class AddConnectionDialog extends Component {
         style={styles.textField}
         onChange={(e) => this.updateField(field.id, e.target.value)} />
     )
+  }
+
+  renderFormFields () {
+
+    let styles = {
+      container: {
+        width: '90%',
+        margin: '0 auto'
+      }
+    }
 
     return (
       <div style={styles.container}>
-        <DropDownMenu
-          menuItems={menuItems}
+        <DropDownMenu value={this.props.form.protocol}
           onChange={this.updateDatabaseType.bind(this)}
-        />
-        {textFields}
+        >
+          {this.renderDatabaseConnectionTypes()}
+        </DropDownMenu>
+        {this.renderTextFields()}
       </div>
     )
   }
 
   render () {
 
-    let standardActions = [
-      {text: 'Cancel'},
-      {text: 'Submit', onTouchTap: this.props.create, ref: 'submit'}
+    const standardActions = [
+      <FlatButton
+        label="Cancel"
+        secondary={true}
+      />,
+      <FlatButton
+        label="Submit"
+        primary={true}
+        onTouchTap={this.props.create} />
     ]
 
     return (

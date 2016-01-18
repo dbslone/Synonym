@@ -1,7 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {
   AppBar,
-  LeftNav
+  LeftNav,
+  MenuItem
 } from 'material-ui'
 
 import {
@@ -34,7 +35,9 @@ export default class Home extends Component {
     postgres: PropTypes.shape({
       databases: PropTypes.array
     }),
-    postgresAddTables: PropTypes.func.isRequired,
+    postgresAddConnection: PropTypes.func.isRequired,
+    postgresListTables: PropTypes.func.isRequired,
+    postgresPerformanceQuery: PropTypes.func.isRequired,
     toggleAddConnectionDialog: PropTypes.func.isRequired,
     toggleLeftPopover: PropTypes.func.isRequired,
     updateAddConnectionField: PropTypes.func.isRequired,
@@ -67,6 +70,7 @@ export default class Home extends Component {
     let {
       connections,
       deleteConnection,
+      postgresAddConnection,
       toggleAddConnectionDialog,
       updateHomepageView
     } = this.props
@@ -76,6 +80,7 @@ export default class Home extends Component {
         connections={connections}
         toggleAddConnectionDialog={toggleAddConnectionDialog}
         deleteConnection={deleteConnection}
+        postgresAddConnection={postgresAddConnection}
         updateHomepageView={updateHomepageView.bind(this)} />
     )
   }
@@ -85,32 +90,25 @@ export default class Home extends Component {
     let {
       homepage,
       postgres,
-      postgresAddTables
+      postgresAddConnection,
+      postgresListTables,
+      postgresPerformanceQuery
     } = this.props
 
     return (
       <div>
         <PostgresView
-          addTables={postgresAddTables.bind(this)}
+          addConnection={postgresAddConnection}
+          listTables={postgresListTables}
           databases={postgres}
           connection={homepage.connection}
+          getPerformanceResults={postgresPerformanceQuery}
         />
       </div>
     )
   }
 
   render () {
-
-    let menuItems = [
-      {
-        route: 'get-started',
-        text: 'Get Started'
-      },
-      {
-        route: 'customization',
-        text: 'Customization'
-      }
-    ]
 
     let {
       dialogs,
@@ -120,7 +118,10 @@ export default class Home extends Component {
 
     return (
       <div>
-        <LeftNav ref="leftNav" menuItems={menuItems} docked={false} />
+        <LeftNav ref="leftNav" docked={false}>
+          <MenuItem>Item 1</MenuItem>
+          <MenuItem>Item 2</MenuItem>
+        </LeftNav>
         <AppBar title="Synonym"
           onLeftIconButtonTouchTap={this._onLeftIconButtonTouchTap.bind(this)} />
 
