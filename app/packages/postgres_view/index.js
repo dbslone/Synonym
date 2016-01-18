@@ -7,16 +7,16 @@ import {Tabs,
 } from 'material-ui'
 import {map} from 'lodash'
 
-let massive = require('massive')
-let listTablesQuery = "SELECT * FROM information_schema.tables WHERE table_type = 'BASE TABLE' AND table_schema = 'public' ORDER BY table_catalog, table_name"
+import Performance from './performance'
 
 class PostgresView extends Component {
 
   static propTypes = {
-    addTables: PropTypes.func.isRequired,
+    addConnection: PropTypes.func.isRequired,
     connection: PropTypes.object,
     connectionSettings: PropTypes.object,
-    databases: PropTypes.object.isRequired
+    databases: PropTypes.object.isRequired,
+    getPerformanceResults: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -28,15 +28,6 @@ class PostgresView extends Component {
     return (
       <div>{tableName}</div>
     )
-  }
-
-  componentDidMount () {
-
-    let connection = massive.connectSync({connectionString: this.props.connection.connectionString})
-
-    connection.run(listTablesQuery, (err, res) => {
-      this.props.addTables(res)
-    })
   }
 
   renderTables (tables) {
@@ -60,10 +51,11 @@ class PostgresView extends Component {
          fontSize: 13
       }
     }
+    
     return map(tables, (t) => {
 
       return (
-        <Paper style={styles.container} zDepth={2} onClick={() => this.loadTable(t.table_name)}>
+        <Paper style={styles.container} zDepth={2} onClick={() => this.loadTable()}>
           <i style={styles.icon} className="fa fa-table"></i>
           <div style={styles.label}>{t.table_name}</div>
         </Paper>
@@ -132,6 +124,11 @@ class PostgresView extends Component {
       }
     }
 
+    let {
+      addConnection,
+      getPerformanceResults
+    } = this.props
+
     return (
       <div style={styles.base}>
         <Tabs>
@@ -148,9 +145,12 @@ class PostgresView extends Component {
               </div>
             </div>
           </Tab>
-          <Tab label="Saved Queries">
+          <Tab label="DB Performance">
             <div>
-              Saved Queries listed here
+              <Performance
+                addConnection={addConnection}
+                getPerformanceResults={getPerformanceResults}
+              />
             </div>
           </Tab>
         </Tabs>
