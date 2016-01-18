@@ -14,7 +14,7 @@ let initialState = {
     nickname: '',
     password: '',
     port: '',
-    protocol: {},
+    protocol: 'postgres',
     username: ''
   },
   leftPopover: false
