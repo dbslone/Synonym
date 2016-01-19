@@ -78,7 +78,7 @@ export function postgresPerformanceQuery () {
 
     connection.run('SELECT * FROM pg_stat_activity', (err, response) => {
 
-      // dispatch(postgresUpdatePerformance(response))
+      dispatch(postgresUpdatePerformance(response))
     })
   }
 }
