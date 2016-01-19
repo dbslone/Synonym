@@ -33,7 +33,7 @@ export default class Home extends Component {
     }),
     initializeConnections: PropTypes.func.isRequired,
     postgres: PropTypes.shape({
-      databases: PropTypes.array
+      databases: PropTypes.object
     }),
     postgresAddConnection: PropTypes.func.isRequired,
     postgresListTables: PropTypes.func.isRequired,
@@ -100,9 +100,10 @@ export default class Home extends Component {
         <PostgresView
           addConnection={postgresAddConnection}
           listTables={postgresListTables}
-          databases={postgres}
+          databases={postgres.databases}
           connection={homepage.connection}
           getPerformanceResults={postgresPerformanceQuery}
+          performance={postgres.performance}
         />
       </div>
     )

@@ -16,11 +16,13 @@ class PostgresView extends Component {
     connection: PropTypes.object,
     connectionSettings: PropTypes.object,
     databases: PropTypes.object.isRequired,
-    getPerformanceResults: PropTypes.func.isRequired
+    getPerformanceResults: PropTypes.func.isRequired,
+    listTables: PropTypes.func.isRequired,
+    performance: PropTypes.array
   }
 
   static defaultProps = {
-
+    performance: []
   }
 
   loadTable (tableName) {
@@ -28,6 +30,11 @@ class PostgresView extends Component {
     return (
       <div>{tableName}</div>
     )
+  }
+
+  componentDidMount () {
+
+    this.props.listTables()
   }
 
   renderTables (tables) {
@@ -51,11 +58,11 @@ class PostgresView extends Component {
          fontSize: 13
       }
     }
-    
+
     return map(tables, (t) => {
 
       return (
-        <Paper style={styles.container} zDepth={2} onClick={() => this.loadTable()}>
+        <Paper style={styles.container} zDepth={2} key={t.table_name} onClick={() => this.loadTable()}>
           <i style={styles.icon} className="fa fa-table"></i>
           <div style={styles.label}>{t.table_name}</div>
         </Paper>
@@ -63,12 +70,11 @@ class PostgresView extends Component {
     })
   }
 
-  renderDatabase (database) {
+  renderDatabases () {
 
     let styles = {
-      base: {
-        color: 'black',
-        display: 'inline-block'
+      container: {
+        color: 'black'
       },
       label: {
         padding: '10px 0 10px 0',
@@ -77,37 +83,17 @@ class PostgresView extends Component {
       }
     }
 
-    let db = map(database, (tables, databaseName) => {
+    let databases = map(this.props.databases, (tables, databaseName) => {
 
       return (
-        <div>
+        <div style={styles.container} key={databaseName}>
           <div style={styles.label}>{databaseName}</div>
-          <div style={styles.base}>{this.renderTables(tables)}</div>
+          {this.renderTables(tables)}
         </div>
       )
     })
 
-    return db
-  }
-
-  renderDatabases () {
-
-    let styles = {
-      container: {
-        color: 'black'
-      }
-    }
-
-    let tables = map(this.props.databases, (database) => {
-
-      return (
-        <div style={styles.container}>
-          {this.renderDatabase(database)}
-        </div>
-      )
-    })
-
-    return tables
+    return databases
   }
 
   render () {
@@ -126,14 +112,15 @@ class PostgresView extends Component {
 
     let {
       addConnection,
-      getPerformanceResults
+      getPerformanceResults,
+      performance
     } = this.props
 
     return (
       <div style={styles.base}>
         <Tabs>
           <Tab label="Tables">
-            {this.renderDatabases()}
+          {this.renderDatabases()}
           </Tab>
           <Tab label="SQL">
             <div>
@@ -141,7 +128,7 @@ class PostgresView extends Component {
               <div style={styles.btn}><RaisedButton label="Execute Query" primary={true} /></div>
 
               <div>
-                EXECUTED QUERY GOES HERE
+              EXECUTED QUERY GOES HERE
               </div>
             </div>
           </Tab>
@@ -150,6 +137,7 @@ class PostgresView extends Component {
               <Performance
                 addConnection={addConnection}
                 getPerformanceResults={getPerformanceResults}
+                performance={performance}
               />
             </div>
           </Tab>

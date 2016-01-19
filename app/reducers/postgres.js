@@ -9,7 +9,7 @@ import {groupBy} from 'lodash'
 
 let initialState = {
   connection: {},
-  databases: [],
+  databases: {},
   queryData: {},
   performance: []
 }
@@ -19,7 +19,7 @@ export default function postgres (state = initialState, action) {
   switch (action.type) {
     case POSTGRES_ADD_TABLES: {
       let databases = groupBy(action.payload, (n) => n.table_catalog)
-console.log('databases: ', databases)
+
       return {
         ...state,
         databases

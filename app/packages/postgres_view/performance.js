@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react'
+import {map} from 'lodash'
 
 import Table from 'material-ui/lib/table/table'
 import TableBody from 'material-ui/lib/table/table-body'
@@ -11,11 +12,12 @@ import TableRowColumn from 'material-ui/lib/table/table-row-column'
 class Performance extends Component {
 
   static propTypes = {
-    getPerformanceResults: PropTypes.func.isRequired
+    getPerformanceResults: PropTypes.func.isRequired,
+    performance: PropTypes.array
   }
 
   static defaultProps = {
-
+    performance: []
   }
 
   componentDidMount () {
@@ -23,15 +25,31 @@ class Performance extends Component {
     this.props.getPerformanceResults()
   }
 
+  renderColumns (row) {
+
+    let columns = map(row, (column) => {
+
+      return (
+        <TableRowColumn>{column}</TableRowColumn>
+      )
+    })
+console.log('columns', columns)
+    return columns
+  }
+
   renderResults () {
 
-    return (
-      <TableRow selected={true}>
-        <TableRowColumn>1</TableRowColumn>
-        <TableRowColumn>John Smith</TableRowColumn>
-        <TableRowColumn>Employed</TableRowColumn>
-      </TableRow>
-    )
+    let results = map(this.props.performance, (row) => {
+console.log('row: ', row)
+      return (
+        <TableRow selected={true}>
+          <TableRowColumn>{row.datname}</TableRowColumn>
+          <TableRowColumn>{row.query}</TableRowColumn>
+        </TableRow>
+      )
+    })
+
+    return results
   }
 
   render () {
