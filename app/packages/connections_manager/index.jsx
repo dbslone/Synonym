@@ -19,7 +19,7 @@ class ConnectionsManager extends Component {
   }
 
   static defaultProps = {
-
+    connections: []
   }
 
   show () {
