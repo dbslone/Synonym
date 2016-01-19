@@ -49,7 +49,7 @@ class AddConnectionDialog extends Component {
       {payload: 'sqlite', text: 'SQLite'}
     ]
 
-    return map(menuItems, obj => <MenuItem value={obj.payload} primaryText={obj.text} />)
+    return map(menuItems, obj => <MenuItem key={obj.payload} value={obj.payload} primaryText={obj.text} />)
   }
 
   renderTextFields () {
@@ -104,10 +104,12 @@ class AddConnectionDialog extends Component {
 
     const standardActions = [
       <FlatButton
+        key="cancel"
         label="Cancel"
         secondary={true}
       />,
       <FlatButton
+        key="submit"
         label="Submit"
         primary={true}
         onTouchTap={this.props.create} />
