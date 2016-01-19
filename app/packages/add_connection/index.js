@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {
+  Checkbox,
   Dialog,
   DropDownMenu,
   FlatButton,
@@ -79,6 +80,21 @@ class AddConnectionDialog extends Component {
     )
   }
 
+  renderRadioFields () {
+
+    return (
+      <Checkbox
+        name="ssl"
+        value="ssl"
+        label="SSL"
+        onCheck={(e, checked) => {
+          this.updateField('ssl', checked)
+          }
+        }
+      />
+    )
+  }
+
   renderFormFields () {
 
     let styles = {
@@ -93,9 +109,10 @@ class AddConnectionDialog extends Component {
         <DropDownMenu value={this.props.form.protocol}
           onChange={this.updateDatabaseType.bind(this)}
         >
-          {this.renderDatabaseConnectionTypes()}
+        {this.renderDatabaseConnectionTypes()}
         </DropDownMenu>
         {this.renderTextFields()}
+        {this.renderRadioFields()}
       </div>
     )
   }

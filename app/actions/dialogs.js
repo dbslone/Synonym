@@ -112,5 +112,9 @@ function buildConnectionString (connection) {
     connectionString = `${connectionString}/${connection.database}`
   }
 
+  if (connection.ssl) {
+    connectionString = `${connectionString}?ssl=true`
+  }
+
   return connectionString
 }

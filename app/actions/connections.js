@@ -3,7 +3,6 @@ import {
 } from './action_types'
 
 import {reject} from 'lodash'
-
 let fs = require('fs')
 
 export function initializeConnections () {
@@ -15,7 +14,7 @@ export function initializeConnections () {
   catch (err) {
     connections = []
   }
-console.log('initialize connections: ', connections)
+
   return {
     type: INITIALIZE_CONNECTIONS,
     payload: connections
@@ -29,7 +28,7 @@ export function deleteConnection (nickname) {
     let state = getState()
 
     let connections = reject(state.connections, {nickname})
-console.log('left after delete: ', connections)
+
     fs.writeFileSync('databases.json', JSON.stringify(connections), 'utf8')
     dispatch(initializeConnections())
   }
