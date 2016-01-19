@@ -76,7 +76,7 @@ export function postgresPerformanceQuery () {
     let state = getState()
     let connection = massive.connectSync({connectionString: state.postgres.connection.connectionString})
 
-    connection.run('SELECT * FROM pg_stat_activity', (err, response) => {
+    connection.run("select pid,datname,query,now() - pg_stat_activity.query_start as duration from pg_stat_activity where pg_stat_activity.query <> ''::text and now() - pg_stat_activity.query_start > interval '5 minutes'", (err, response) => {
 
       dispatch(postgresUpdatePerformance(response))
     })
