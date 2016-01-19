@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {map} from 'lodash'
+import {map, padStart} from 'lodash'
 
 import Table from 'material-ui/lib/table/table'
 import TableBody from 'material-ui/lib/table/table-body'
@@ -25,26 +25,15 @@ class Performance extends Component {
     this.props.getPerformanceResults()
   }
 
-  renderColumns (row) {
-
-    let columns = map(row, (column) => {
-
-      return (
-        <TableRowColumn>{column}</TableRowColumn>
-      )
-    })
-console.log('columns', columns)
-    return columns
-  }
-
   renderResults () {
 
     let results = map(this.props.performance, (row) => {
-console.log('row: ', row)
+
       return (
         <TableRow selected={true}>
           <TableRowColumn>{row.datname}</TableRowColumn>
           <TableRowColumn>{row.query}</TableRowColumn>
+          <TableRowColumn>{padStart(row.duration.minutes, 2)}:{padStart(row.duration.seconds, 2)}</TableRowColumn>
         </TableRow>
       )
     })
