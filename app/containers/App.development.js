@@ -15,7 +15,6 @@ export default class App extends Component {
   transitionTo = () => {
 
     let state = store.getState()
-    console.log("STATE", state)
   }
 
   render () {
