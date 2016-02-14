@@ -36,6 +36,8 @@ export default class Home extends Component {
       databases: PropTypes.object
     }),
     postgresAddConnection: PropTypes.func.isRequired,
+    postgresDisplayTable: PropTypes.func.isRequired,
+    postgresFetchTable: PropTypes.func.isRequired,
     postgresListTables: PropTypes.func.isRequired,
     postgresPerformanceQuery: PropTypes.func.isRequired,
     toggleAddConnectionDialog: PropTypes.func.isRequired,
@@ -91,6 +93,8 @@ export default class Home extends Component {
       homepage,
       postgres,
       postgresAddConnection,
+      postgresDisplayTable,
+      postgresFetchTable,
       postgresListTables,
       postgresPerformanceQuery
     } = this.props
@@ -99,11 +103,16 @@ export default class Home extends Component {
       <div>
         <PostgresView
           addConnection={postgresAddConnection}
-          listTables={postgresListTables}
-          databases={postgres.databases}
           connection={homepage.connection}
+          databases={postgres.databases}
+          displayTable={postgresDisplayTable}
           getPerformanceResults={postgresPerformanceQuery}
+          listTables={postgresListTables}
           performance={postgres.performance}
+          table={postgres.table}
+          tableData={postgres.tableData}
+          fetchTable={postgresFetchTable}
+          view={postgres.view}
         />
       </div>
     )

@@ -1,8 +1,11 @@
 import {
-  POSTGRES_ADD_TABLES,
   POSTGRES_ADD_CONNECTION,
+  POSTGRES_ADD_TABLES,
+  POSTGRES_DISPLAY_TABLE,
   POSTGRES_PERFORMANCE,
-  POSTGRES_QUERY_DATA
+  POSTGRES_QUERY_DATA,
+  POSTGRES_UPDATE_TABLE_DATA,
+  POSTGRES_UPDATE_TABLE_SCHEMA
 } from '../actions/action_types'
 
 import {groupBy} from 'lodash'
@@ -10,8 +13,11 @@ import {groupBy} from 'lodash'
 let initialState = {
   connection: {},
   databases: {},
+  performance: [],
   queryData: {},
-  performance: []
+  tableData: [],
+  tableSchema: [],
+  view: 'index'
 }
 
 export default function postgres (state = initialState, action) {
@@ -44,6 +50,30 @@ export default function postgres (state = initialState, action) {
       return {
         ...state,
         performance: action.payload
+      }
+    }
+
+    case POSTGRES_DISPLAY_TABLE: {
+      return {
+        ...state,
+        table: action.payload,
+        view: 'table'
+      }
+    }
+
+    case POSTGRES_UPDATE_TABLE_DATA: {
+
+      return {
+        ...state,
+        tableData: action.payload
+      }
+    }
+
+    case POSTGRES_UPDATE_TABLE_SCHEMA: {
+
+      return {
+        ...state,
+        tableSchema: action.payload
       }
     }
 

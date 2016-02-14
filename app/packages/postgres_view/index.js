@@ -8,6 +8,7 @@ import {Tabs,
 import {map} from 'lodash'
 
 import Performance from './performance'
+import TableView from './table_view'
 
 class PostgresView extends Component {
 
@@ -16,20 +17,20 @@ class PostgresView extends Component {
     connection: PropTypes.object,
     connectionSettings: PropTypes.object,
     databases: PropTypes.object.isRequired,
+    fetchTable: PropTypes.func.isRequired,
     getPerformanceResults: PropTypes.func.isRequired,
     listTables: PropTypes.func.isRequired,
-    performance: PropTypes.array
+    performance: PropTypes.array,
+    table: PropTypes.string,
+    tableData: PropTypes.array,
+    view: PropTypes.string
   }
 
   static defaultProps = {
-    performance: []
-  }
-
-  loadTable (tableName) {
-
-    return (
-      <div>{tableName}</div>
-    )
+    performance: [],
+    table: '',
+    tableView: [],
+    view: 'index'
   }
 
   componentDidMount () {
@@ -62,7 +63,12 @@ class PostgresView extends Component {
     return map(tables, (t) => {
 
       return (
-        <Paper style={styles.container} zDepth={2} key={t.table_name} onClick={() => this.loadTable()}>
+        <Paper
+          style={styles.container}
+          zDepth={2}
+          key={t.table_name}
+          onClick={() => this.props.displayTable(t.table_name)}
+        >
           <i style={styles.icon} className="fa fa-table"></i>
           <div style={styles.label}>{t.table_name}</div>
         </Paper>
@@ -96,8 +102,16 @@ class PostgresView extends Component {
     return databases
   }
 
-  render () {
+  renderTableView () {
 
+    return (
+      <div>
+        <TableView tableName={this.props.table} tableData={this.props.tableData} fetchTable={this.props.fetchTable} />
+      </div>
+    )
+  }
+
+  renderIndexView () {
     let styles = {
       base: {
         color: 'black'
@@ -144,6 +158,16 @@ class PostgresView extends Component {
         </Tabs>
       </div>
     )
+  }
+
+  render () {
+
+    if (this.props.view === 'index') {
+      return this.renderIndexView()
+    }
+    else {
+      return this.renderTableView()
+    }
   }
 
 }
