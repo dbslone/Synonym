@@ -1,18 +1,15 @@
-var path = require('path')
+import path from 'path'
 
-module.exports = {
+export default {
   module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        loaders: ['babel-loader'],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.(png|jpg)$/,
-        loader: 'url-loader?limit=8192'
-      }
-    ]
+    loaders: [{
+      test: /\.jsx?$/,
+      loaders: ['babel-loader'],
+      exclude: /node_modules/
+    }, {
+      test: /\.json$/,
+      loader: 'json-loader'
+    }]
   },
   output: {
     path: path.join(__dirname, 'dist'),

@@ -1,29 +1,30 @@
-var path = require('path');
-var express = require('express');
-var webpack = require('webpack');
-var config = require('./webpack.config.development');
+/* eslint no-console: 0 */
 
-var app = express();
-var compiler = webpack(config);
+import express from 'express'
+import webpack from 'webpack'
+import webpackDevMiddleware from 'webpack-dev-middleware'
+import webpackHotMiddleware from 'webpack-hot-middleware'
 
-app.use(require('webpack-dev-middleware')(compiler, {
+import config from './webpack.config.development'
+
+const app = express()
+const compiler = webpack(config)
+const PORT = 3000
+
+app.use(webpackDevMiddleware(compiler, {
   publicPath: config.output.publicPath,
   stats: {
     colors: true
   }
-}));
+}))
 
-app.use(require('webpack-hot-middleware')(compiler));
+app.use(webpackHotMiddleware(compiler))
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'app', 'hot-dev-app.html'));
-});
-
-app.listen(3000, 'localhost', function(err) {
+app.listen(PORT, 'localhost', err => {
   if (err) {
-    console.log(err);
-    return;
+    console.error(err)
+    return
   }
 
-  console.log('Listening at http://localhost:3000');
-});
+  console.log(`Listening at http://localhost:${PORT}`)
+})
