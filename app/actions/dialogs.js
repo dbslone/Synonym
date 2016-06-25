@@ -1,4 +1,5 @@
 import {
+  LS_ALL_CONNECTIONS_KEY,
   RESET_ADD_CONNECTION_DIALOG,
   TOGGLE_ADD_CONNECTION_DIALOG,
   TOGGLE_LEFT_POPOVER,
@@ -9,11 +10,10 @@ import * as synonymConnections from './connections'
 
 import {
   isEmpty,
-  isNull,
-  findWhere,
-  isUndefined
+  isNull
 } from 'lodash'
 let massive = require('massive')
+let ls = require('local-storage')
 
 export function toggleAddConnectionDialog (payload) {
 
@@ -50,18 +50,21 @@ export function createNewConnection (payload) {
 
   return (dispatch) => {
 
-    let fs = require('fs')
     let connections,
         obj = payload
 
     try {
-      connections = JSON.parse(fs.readFileSync('databases.json', {encoding: 'utf8'}))
+      connections = ls.get(LS_ALL_CONNECTIONS_KEY)
+      console.log('connections: ', connections)
+      if (connections !== null) {
+
+      }
     }
     catch (err) {
       connections = []
     }
 
-    if (!isUndefined(findWhere(connections, {nickname: obj.nickname}))) {
+    if (ls.get(obj.nickname) !== null) {
       alert('Connection already exists with this name.')
       return
     }
@@ -77,7 +80,11 @@ export function createNewConnection (payload) {
         else {
           connections.push(obj)
 
-          fs.writeFileSync('databases.json', JSON.stringify(connections))
+          // fs.writeFileSync('databases.json', JSON.stringify(connections))
+          ls.set(obj.nickname, obj.connectionString)
+          connections = ls.get(LS_ALL_CONNECTIONS_KEY) || []
+          console.log('connections: ', connections)
+          ls.set(LS_ALL_CONNECTIONS_KEY, connections.concat(obj.nickname))
 
           dispatch(resetAddConnectionDialog())
           dispatch(toggleAddConnectionDialog())
