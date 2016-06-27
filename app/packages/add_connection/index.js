@@ -99,13 +99,13 @@ class AddConnectionDialog extends Component {
 
     let styles = {
       container: {
-        width: '90%',
-        margin: '0 auto'
+        height: 'inherit',
+        overflowY: 'auto'
       }
     }
 
     return (
-      <div style={styles.container}>
+      <div style={styles.container} className="new-connection-form">
         <DropDownMenu value={this.props.form.protocol}
           onChange={this.updateDatabaseType.bind(this)}
         >

@@ -50,25 +50,15 @@ export function createNewConnection (payload) {
 
   return (dispatch) => {
 
-    let connections,
-        obj = payload
-
-    try {
-      connections = ls.get(LS_ALL_CONNECTIONS_KEY)
-      console.log('connections: ', connections)
-      if (connections !== null) {
-
-      }
-    }
-    catch (err) {
-      connections = []
-    }
+    let connections
+    let obj = payload
 
     if (ls.get(obj.nickname) !== null) {
       alert('Connection already exists with this name.')
       return
     }
 
+    connections = ls.get(LS_ALL_CONNECTIONS_KEY) || []
     obj.connectionString = buildConnectionString(obj)
 
     massive.connect({connectionString: obj.connectionString},
@@ -78,12 +68,7 @@ export function createNewConnection (payload) {
           console.error('Error: Unable to add the connection. Please check your settings and try again.', err)
         }
         else {
-          connections.push(obj)
-
-          // fs.writeFileSync('databases.json', JSON.stringify(connections))
           ls.set(obj.nickname, obj.connectionString)
-          connections = ls.get(LS_ALL_CONNECTIONS_KEY) || []
-          console.log('connections: ', connections)
           ls.set(LS_ALL_CONNECTIONS_KEY, connections.concat(obj.nickname))
 
           dispatch(resetAddConnectionDialog())

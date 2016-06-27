@@ -1,19 +1,17 @@
 import {
-  INITIALIZE_CONNECTIONS
+  INITIALIZE_CONNECTIONS,
+  LS_ALL_CONNECTIONS_KEY
 } from './action_types'
 
-import {reject} from 'lodash'
-let fs = require('fs')
+import {map, reject} from 'lodash'
+let ls = require('local-storage')
 
 export function initializeConnections () {
 
-  let connections
-  try {
-    connections = JSON.parse(fs.readFileSync('databases.json', {encoding: 'utf8'}))
-  }
-  catch (err) {
-    connections = []
-  }
+  let connections = map(ls.get(LS_ALL_CONNECTIONS_KEY), (lsKey) => {
+
+
+  })
 
   return {
     type: INITIALIZE_CONNECTIONS,
